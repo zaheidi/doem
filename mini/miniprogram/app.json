@@ -1,0 +1,60 @@
+{
+    "pages": [
+      "pages/job_list/job_list",
+      "pages/application_progress/application_progress",
+      "pages/user_profile/user_profile",
+      "pages/job_detail/job_detail",
+      "pages/post_job/post_job",
+      "pages/teacher_stats/teacher_stats"
+    ],
+    "window": {
+      "navigationBarTextStyle": "black",
+      "navigationBarTitleText": "酱菜内推",
+      "navigationBarBackgroundColor": "#ffffff"
+    },
+    "tabBar": {
+      "custom": false,
+      "color": "#999999",
+      "selectedColor": "#0079FE",
+      "backgroundColor": "#ffffff",
+      "list": [
+        {
+          "pagePath": "pages/job_list/job_list",
+          "text": "职位",
+          "iconPath": "assets/icons/home.png",
+          "selectedIconPath": "assets/icons/home-active.png"
+        },
+        {
+          "pagePath": "pages/application_progress/application_progress",
+          "text": "进度",
+          "iconPath": "assets/icons/progress.png",
+          "selectedIconPath": "assets/icons/progress-active.png"
+        },
+        {
+          "pagePath": "pages/user_profile/user_profile",
+          "text": "我的",
+          "iconPath": "assets/icons/profile.png",
+          "selectedIconPath": "assets/icons/profile-active.png"
+        }
+      ]
+    },
+    "componentFramework": "glass-easel",
+    "lazyCodeLoading": "requiredComponents",
+    "usingComponents": {
+      "t-button": "tdesign-miniprogram/button/button",
+      "t-input": "tdesign-miniprogram/input/input",
+      "t-icon": "tdesign-miniprogram/icon/icon",
+      "t-tag": "tdesign-miniprogram/tag/tag",
+      "t-cell": "tdesign-miniprogram/cell/cell",
+      "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
+      "t-search": "tdesign-miniprogram/search/search",
+      "t-avatar": "tdesign-miniprogram/avatar/avatar",
+      "t-empty": "tdesign-miniprogram/empty/empty",
+      "t-loading": "tdesign-miniprogram/loading/loading",
+      "t-popup": "tdesign-miniprogram/popup/popup",
+      "t-textarea": "tdesign-miniprogram/textarea/textarea",
+      "t-dialog": "tdesign-miniprogram/dialog/dialog"
+    },
+    "cloud": true
+  }
+  

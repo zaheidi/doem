@@ -1,0 +1,308 @@
+/* job_detail.wxss */
+page {
+  background-color: #f5f5f5;
+  padding-bottom: 160rpx;
+}
+
+.container {
+  min-height: 100vh;
+  padding-bottom: 180rpx;
+  box-sizing: border-box;
+  background: #f5f5f5;
+}
+
+/* 职位头部信息 */
+.job-header {
+  background: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.job-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.job-salary {
+  font-size: 40rpx;
+  color: #ff4d4f;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.job-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.info-item text {
+  margin-left: 8rpx;
+}
+
+.job-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+/* 各部分通用样式 */
+.section,
+.screenshot-info {
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  margin: 24rpx 24rpx 0 24rpx;
+  padding: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.section-title text {
+  margin-left: 12rpx;
+}
+
+.section-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 内推者说明部分 */
+.recommender-section {
+  background: #fff;
+}
+
+/* 岗位详情链接和二维码部分 */
+.job-link {
+  background: #f9f9f9;
+  padding: 24rpx;
+  border-radius: 8rpx;
+  margin-bottom: 30rpx;
+  font-size: 28rpx;
+  color: #0052d9;
+  word-break: break-all;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.link-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy-btn {
+  color: #0052d9;
+  background: #e6f7ff;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  margin-left: 20rpx;
+  font-size: 24rpx;
+  white-space: nowrap;
+}
+
+.qrcode-section {
+  display: flex;
+  margin-bottom: 20rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.qrcode-image {
+  width: 240rpx;
+  height: 240rpx;
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.qrcode-image::after {
+  content: '';
+  position: absolute;
+  width: 60rpx;
+  height: 60rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.qrcode {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.qrcode-buttons {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.qrcode-button {
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 20rpx 0;
+  margin-bottom: 20rpx;
+  text-align: center;
+  font-size: 28rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qrcode-button:last-child {
+  margin-bottom: 0;
+}
+
+.qrcode-button .button-title {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 4rpx;
+}
+
+.qrcode-button .button-text {
+  color: #0052d9;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.qrcode-button .button-text text {
+  margin-left: 8rpx;
+}
+
+/* 发布人信息 */
+.publisher-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.publisher-info,
+.reviewer-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.publisher-name,
+.reviewer-name {
+  font-size: 28rpx;
+  color: #666;
+  margin: 0 12rpx;
+}
+
+/* 关联信息部分 */
+.association-section {
+  border-left: 6rpx solid #0052d9;
+  margin-top: -8px;
+  margin-bottom: 0;
+}
+
+.teacher-info {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 20rpx;
+}
+
+.student-info {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 20rpx;
+  margin-top: 10rpx;
+}
+
+.student-detail {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 8rpx;
+}
+
+.teacher-comment {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  padding: 12rpx 16rpx;
+  border-radius: 8rpx;
+  margin-top: 8rpx;
+}
+
+/* 底部操作栏 */
+.footer-actions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 140rpx;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+  z-index: 99;
+}
+
+.favor-btn {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30rpx;
+}
+
+.favor-btn.active {
+  background: #fff0f0;
+}
+
+.apply-btn {
+  flex: 1;
+}
+
+.screenshot-info {
+  margin-top: 16rpx;
+  padding: 24rpx;
+  background: #f9f9f9;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #888;
+  line-height: 1.8;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+} 

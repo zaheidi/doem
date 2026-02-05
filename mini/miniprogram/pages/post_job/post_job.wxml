@@ -1,0 +1,167 @@
+<!--post_job.wxml-->
+<view class="container" bindtap="onTap">
+<view class="form-container">
+<!-- 职位名称 -->
+<t-input
+label="职位名称"
+placeholder="请输入职位名称"
+value="{{formData.title}}"
+bind:change="onTitleChange"
+required
+/>
+<!-- 薪资范围 -->
+<t-input
+label="薪资范围"
+placeholder="如：15k-25k"
+value="{{formData.salary}}"
+bind:change="onSalaryChange"
+required
+tips="请填写月薪范围，单位为k"
+/>
+<!-- 工作地点 -->
+<view class="form-block">
+      <view class="form-block-title">工作城市 *</view>
+      <view class="fake-select" bindtap="onCityPickerClick">
+        <text class="{{selectedCityIndex === null ? 'placeholder' : ''}}">
+          {{selectedCityIndex === null ? '点击选择城市' : cityList[selectedCityIndex]}}
+        </text>
+        <t-icon name="chevron-down" size="32rpx" color="#999" />
+      </view>
+      
+      <t-picker
+        visible="{{cityPickerVisible}}"
+        value="{{[selectedCityIndex]}}"
+        title="选择城市"
+        cancelBtn="{{cancelText}}" 
+        confirmBtn="{{confirmText}}"
+        bindconfirm="onCityPickerConfirm"
+        bindcancel="onCityPickerCancel"
+
+      >
+      <view slot="cancel" style="color: #999;">取消</view>
+      <view slot="confirm" style="color: #0052d9;">确认</view>
+        <t-picker-item options="{{cityOptions}}" />
+      </t-picker>
+
+      <view wx:if="{{useCustomLocation}}" style="margin-top: 20rpx;">
+        <t-input label="其他地点" placeholder="如：国外、不定" value="{{customLocation}}" bind:change="onCustomLocationChange" borderless />
+      </view>
+    </view>
+<!-- 职位标签 -->
+<view class="form-block">
+<view class="form-block-title">职位标签</view>
+<view class="tag-selector">
+<view
+class="tag {{item.selected ? 'selected' : ''}}"
+wx:for="{{tagOptions}}"
+wx:key="value"
+bindtap="onTagSelect"
+data-tag="{{item.value}}"
+>
+{{item.label}}
+</view>
+</view>
+<view class="tag-counter">已选择 <text class="counter">{{formData.tags.length}}</text>/5 个标签</view>
+</view>
+<!-- 职位描述 -->
+<view class="form-block">
+  <view class="form-block-title">职位描述</view>
+  <t-textarea 
+    placeholder="请详细说明岗位职责、任职要求等信息..."
+    value="{{formData.jobDescription}}" 
+    bind:change="onJobDescriptionChange" 
+    maxlength="1000"
+    indicator
+    style="height: 300rpx;"
+  />
+  <view class="form-tips">详细的描述有助于 AI 更精准地为您匹配候选人</view>
+</view>
+
+<!-- 内推者想说 -->
+<view class="form-block" style="height: 545rpx; display: block; box-sizing: border-box">
+<view class="form-block-title">内推者想说</view>
+<t-textarea
+placeholder="请尽可能真实地描述该职位的优势和可能存在的劝退点"
+value="{{formData.recommenderComment}}"
+bind:change="onRecommenderCommentChange"
+maxlength="500"
+indicator
+disableDefaultPadding="{{true}}"
+/>
+<view class="form-tips" style="position: relative; left: 14rpx; top: -31rpx">例如：工作环境、技术栈、团队氛围、发展前景等</view>
+</view>
+<!-- 岗位详情 -->
+<t-input
+label="岗位详情"
+placeholder="请输入岗位详情链接 或 投递方式"
+value="{{formData.jobLink}}"
+bind:change="onJobLinkChange"
+required
+/>
+<!-- 所属公司 -->
+<t-input
+label="所属公司"
+placeholder="请输入公司名称"
+value="{{formData.company}}"
+bind:change="onCompanyChange"
+required
+/>
+<!-- 发布人信息 -->
+<view class="form-block">
+<view class="form-block-title">发布人信息</view>
+<view class="publisher-info">
+<t-input
+placeholder="发布人姓名"
+value="{{formData.publisherName}}"
+bind:change="onPublisherNameChange"
+style="flex: 1; margin-right: 20rpx;"
+/>
+<view class="custom-select" catchtap>
+<view class="select-value" catchtap="togglePublisherDropdown">
+{{formData.publisherType}}
+<t-icon name="chevron-down" size="32rpx" />
+</view>
+<view class="select-dropdown {{isPublisherDropdownOpen ? 'open' : ''}}">
+<view
+class="select-option {{formData.publisherType === '校友' ? 'active' : ''}}"
+data-value="校友"
+catchtap="onPublisherTypeSelect"
+>校友</view>
+<view
+class="select-option {{formData.publisherType === '老师' ? 'active' : ''}}"
+data-value="老师"
+catchtap="onPublisherTypeSelect"
+>老师</view>
+</view>
+</view>
+</view>
+<view class="form-tips">请填写发布人姓名和身份标签</view>
+</view>
+<!-- 审核人信息 -->
+<view class="form-block disabled-block">
+<view class="form-block-title">
+审核人信息
+<text class="status-tag">发布后由老师审核</text>
+</view>
+<view class="publisher-info">
+<t-input
+placeholder="审核老师姓名"
+value="{{formData.reviewerName}}"
+disabled
+style="flex: 1; margin-right: 20rpx;"
+/>
+<view class="custom-select disabled">
+<view class="select-value">
+老师
+<t-icon name="chevron-down" size="32rpx" />
+</view>
+</view>
+</view>
+<view class="form-tips">岗位发布后，将由系统分配老师进行审核</view>
+</view>
+<!-- 提交按钮 -->
+<view class="submit-btn-container">
+<t-button theme="primary" block size="large" class="submit-btn" bindtap="onSubmit">发布职位</t-button>
+</view>
+</view>
+</view> 

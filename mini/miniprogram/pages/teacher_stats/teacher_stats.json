@@ -1,0 +1,15 @@
+{
+  "navigationBarTitleText": "教师统计",
+  "usingComponents": {
+    "t-icon": "/miniprogram_npm/tdesign-miniprogram/icon/icon",
+    "t-avatar": "/miniprogram_npm/tdesign-miniprogram/avatar/avatar",
+    "t-button": "/miniprogram_npm/tdesign-miniprogram/button/button",
+    "t-popup": "/miniprogram_npm/tdesign-miniprogram/popup/popup",
+    "t-tag": "/miniprogram_npm/tdesign-miniprogram/tag/tag",
+    "t-progress": "/miniprogram_npm/tdesign-miniprogram/progress/progress",
+    "t-input": "/miniprogram_npm/tdesign-miniprogram/input/input",
+    "t-dropdown-menu": "/miniprogram_npm/tdesign-miniprogram/dropdown-menu/dropdown-menu",
+    "t-row": "/miniprogram_npm/tdesign-miniprogram/row/row",
+    "t-col": "/miniprogram_npm/tdesign-miniprogram/col/col"
+  }
+} 

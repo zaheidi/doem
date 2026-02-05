@@ -1,0 +1,397 @@
+<!-- <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>职位详情</title>
+  <link rel="stylesheet" href="https://unpkg.com/tdesign-mobile-ui/dist/tdesign.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --safe-area-inset-top: env(safe-area-inset-top);
+      --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+    
+    .status-bar {
+      height: 44px;
+      background-color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      padding-top: var(--safe-area-inset-top);
+      position: relative;
+      z-index: 10;
+    }
+    
+    .status-bar .time {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .nav-bar {
+      height: 57px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .nav-bar .title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .back-button {
+      position: absolute;
+      left: 15px;
+      font-size: 18px;
+      color: #333;
+      cursor: pointer;
+    }
+    
+    .content {
+      height: calc(100% - 44px - 57px - 83px - 70px);
+      padding: 15px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+      padding-bottom: 85px;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .job-detail-header {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    
+    .job-detail-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .job-detail-salary {
+      font-size: 22px;
+      color: #ff4d4f;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .tag {
+      background: #f0f0f0;
+      color: #666;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 12px;
+      margin-right: 5px;
+    }
+    
+    .job-detail-section {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .section-title .icon {
+      margin-right: 8px;
+      color: #0052d9;
+    }
+    
+    /* 关联信息模块（直接展示） */
+    .association-section {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border-left: 4px solid #0052d9; /* 强调显示 */
+      box-shadow: 0 2px 8px rgba(0, 82, 217, 0.05);
+    }
+    
+    .association-title {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: #0052d9;
+      display: flex;
+      align-items: center;
+    }
+
+    .association-title::before {
+        content: '\f0c1'; /* FontAwesome link icon */
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        margin-right: 8px;
+    }
+    
+    .association-content {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.6;
+    }
+    
+    .student-info {
+      border-top: 1px dashed #e0e0e0;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .highlight-text {
+        color: #0052d9;
+        font-weight: 500;
+    }
+    
+    .apply-footer {
+      height: 70px;
+      background: #fff;
+      position: fixed;
+      bottom: 83px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 15px;
+      border-top: 1px solid #f0f0f0;
+    }
+    
+    .apply-btn {
+      flex: 1;
+      height: 44px;
+      background: #0052d9;
+      color: #fff;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .tab-bar {
+      height: 83px;
+      background-color: #fff;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      border-top: 1px solid #f0f0f0;
+      padding-bottom: var(--safe-area-inset-bottom);
+    }
+    
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #999;
+    }
+    .tab-item.active { color: #0052d9; }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <div class="time">12:30</div>
+    <div class="icons"><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i> <i class="fas fa-battery-three-quarters"></i></div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+    <div class="title">职位详情</div>
+  </div>
+
+  <div class="content">
+    <div class="job-detail-header">
+      <div class="job-detail-title">前端开发工程师</div>
+      <div class="job-detail-salary">15K-25K</div>
+      <div class="job-detail-tags">
+        <span class="tag">React</span>
+        <span class="tag">Vue</span>
+        <span class="tag">校招/社招</span>
+      </div>
+    </div>
+
+    <div class="association-section">
+      <div class="association-title">精准关联推介</div>
+      <div class="association-content">
+        <div><span class="highlight-text">推介老师：</span>陈国（软件学院讲师），近年授课包括《计算机网络》《软件工程》等。</div>
+        
+        <div class="student-info">
+          <span class="highlight-text">匹配学生：</span>贾明（软件工程223班）<br>
+          <span class="highlight-text">学业背景：</span>《软件工程》成绩 <span style="color:#ff4d4f">92分</span>，加权平均成绩 86分。<br>
+          <span class="highlight-text">教师评价：</span>熟悉 Java/Web 编程，项目执行力强，踏实肯钻研。
+        </div>
+        
+        <div class="student-info">
+          <span class="highlight-text">匹配学生：</span>刘晓（商务英语223班）<br>
+          <span class="highlight-text">学业背景：</span>平均加权成绩 95分。<br>
+          <span class="highlight-text">教师评价：</span>优秀的复合型人才，辅修计算机，自驱力极强。
+        </div>
+      </div>
+    </div>
+
+    <div class="job-detail-section">
+      <div class="section-title">
+        <span class="icon"><i class="fas fa-comment-alt"></i></span> 内推寄语
+      </div>
+      <div class="section-content">
+        项目组目前处于快速上升期。进来能把扫地机这个品类从头到尾摸透，后续跳槽转其他智能硬件方向会很顺。虽然工作强度较大，但成长空间极佳。
+      </div>
+    </div>
+
+    <div class="job-detail-section">
+      <div class="section-title">
+        <span class="icon"><i class="fas fa-link"></i></span> 原始招聘链接
+      </div>
+      <div class="job-link">
+        <div class="job-link-text">https://talent.baidu.com/jobs/list</div>
+        <div class="job-link-copy" id="copy-link-btn">复制</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="apply-footer">
+    <div style="padding: 0 15px; color: #999;"><i class="far fa-heart"></i></div>
+    <div class="apply-btn">立即沟通 / 申请</div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-item active"><div class="icon"><i class="fas fa-home"></i></div><div>职位</div></div>
+    <div class="tab-item"><div class="icon"><i class="fas fa-chart-bar"></i></div><div>进度</div></div>
+    <div class="tab-item"><div class="icon"><i class="fas fa-user"></i></div><div>我的</div></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 仅保留复制功能
+      const copyLinkBtn = document.getElementById('copy-link-btn');
+      if (copyLinkBtn) {
+        copyLinkBtn.addEventListener('click', function() {
+          const linkText = document.querySelector('.job-link-text').textContent;
+          const textarea = document.createElement('textarea');
+          textarea.value = linkText;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          this.textContent = '已复制';
+          setTimeout(() => { this.textContent = '复制'; }, 2000);
+        });
+      }
+      // 返回功能
+      document.querySelector('.back-button').addEventListener('click', () => {
+        window.parent.postMessage('navigate:home', '*');
+      });
+    });
+  </script>
+</body>
+<h1 style="color:red; font-size:50px;">代码已更新</h1>
+</html> -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>职位详情</title>
+  <style>
+    body { background-color: #f5f5f5; margin: 0; font-family: sans-serif; color: #333; }
+    .content { padding: 15px; padding-bottom: 100px; }
+    
+    /* 通用卡片样式 */
+    .card { background: #fff; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    
+    /* 职位头 */
+    .job-title { font-size: 22px; font-weight: bold; margin: 0 0 10px 0; }
+    .salary { color: #ff4d4f; font-size: 20px; font-weight: bold; margin-bottom: 15px; }
+    .tag { background: #f0f0f0; color: #666; padding: 3px 8px; border-radius: 4px; font-size: 12px; margin-right: 6px; }
+
+    /* 关联推介 - 同步小程序风格 */
+    .association-card { border-left: 5px solid #0052d9; background: #f0f7ff !important; }
+    .section-title { font-size: 16px; font-weight: bold; color: #0052d9; margin-bottom: 12px; display: flex; align-items: center; }
+    .section-title i { margin-right: 8px; }
+    
+    .student-info { border-top: 1px dashed #ccc; margin-top: 12px; padding-top: 12px; font-size: 14px; }
+    .highlight { color: #0052d9; font-weight: bold; }
+    .comment-box { background: #fff; padding: 10px; border-radius: 6px; margin-top: 8px; font-size: 13px; color: #555; }
+
+    /* 底部按钮 */
+    .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px; border-top: 1px solid #eee; display: flex; box-sizing: border-box; }
+    .apply-btn { flex: 1; background: #0052d9; color: #fff; text-align: center; padding: 12px; border-radius: 25px; font-weight: bold; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="content">
+    <div class="card">
+      <div class="job-title">前端开发工程师</div>
+      <div class="salary">15K-25K</div>
+      <div>
+        <span class="tag">React</span><span class="tag">深圳</span><span class="tag">校招</span>
+      </div>
+    </div>
+
+    <div class="card association-card">
+      <div class="section-title">精准关联推介</div>
+      <div style="font-size: 14px;"><strong>推介老师：</strong>陈国（软件学院讲师）</div>
+      
+      <div class="student-info">
+        <div><span class="highlight">匹配学生：</span>贾明（软件工程223班）</div>
+        <div style="margin-top:5px;">学业背景：《软件工程》成绩 92分</div>
+        <div class="comment-box">
+          <span class="highlight">教师评价：</span>项目执行力强，校友重点推荐。
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" style="color: #333;">内推者想说</div>
+      <div style="font-size: 14px; line-height: 1.6; color: #666;">
+        团队氛围极好，技术栈新，非常适合应届生快速成长。
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="#" class="apply-btn">立即申请</a>
+  </div>
+
+</body>
+</html>

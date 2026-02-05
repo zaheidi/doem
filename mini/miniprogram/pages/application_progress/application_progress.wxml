@@ -1,0 +1,147 @@
+<!--application_progress.wxml-->
+<view class="container">
+  <!-- 标签切换栏 -->
+  <view class="tabs-container">
+    <view class="tabs-header">
+      <view 
+        class="tab-item {{activeTab === 'all' ? 'active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="all"
+      >全部</view>
+      <view 
+        class="tab-item {{activeTab === 'pending' ? 'active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="pending"
+      >待处理</view>
+      <view 
+        class="tab-item {{activeTab === 'processing' ? 'active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="processing"
+      >处理中</view>
+      <view 
+        class="tab-item {{activeTab === 'completed' ? 'active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="completed"
+      >已完成</view>
+    </view>
+    <view class="tabs-slider">
+      <view class="slider-bar" style="left: {{sliderLeft}}; width: {{sliderWidth}}"></view>
+    </view>
+  </view>
+
+  <!-- 申请列表 -->
+  <view class="applications-list" wx:if="{{applications.length > 0}}">
+    <view 
+      class="application-item" 
+      wx:for="{{applications}}" 
+      wx:key="id" 
+      bindtap="onApplicationTap" 
+      data-id="{{item.id}}"
+    >
+      <view class="application-header">
+        <view class="job-title">{{item.jobTitle}}</view>
+
+        <!-- ✅ 改动1：状态显示使用动态 statusText -->
+        <view class="application-status {{item.status}}">{{item.statusText}}</view>
+      </view>
+      
+      <view class="company-info">
+        <text>{{item.company}}</text>
+        <text class="separator">|</text>
+        <text>{{item.location}}</text>
+      </view>
+      
+      <view class="application-timeline">
+        <!-- ✅ 改动2：timeline done 状态根据动态 status 计算 -->
+        <view class="timeline-item {{item.timeline[0].done ? 'done' : ''}}">
+          <view class="timeline-dot"></view>
+          <view class="timeline-content">
+            <view class="timeline-title">{{item.timeline[0].title}}</view>
+            <view class="timeline-time">{{item.timeline[0].time}}</view>
+          </view>
+        </view>
+        
+        <view class="timeline-item {{item.timeline[1].done ? 'done' : ''}}">
+          <view class="timeline-dot"></view>
+          <view class="timeline-content">
+            <view class="timeline-title">{{item.timeline[1].title}}</view>
+            <view class="timeline-time">{{item.timeline[1].time || '等待中'}}</view>
+          </view>
+        </view>
+        
+        <view class="timeline-item {{item.timeline[2].done ? 'done' : ''}} {{item.timeline[2].status === 'passed' ? 'passed' : ''}} {{item.timeline[2].status === 'failed' ? 'failed' : ''}}">
+          <view class="timeline-dot"></view>
+          <view class="timeline-content">
+            <view class="timeline-title">{{item.timeline[2].title}}</view>
+            <view class="timeline-time">{{item.timeline[2].time || '等待中'}}</view>
+
+            <!-- ✅ 改动3：通过 timeline.status 显示已通过/未通过 -->
+            <view class="timeline-status" wx:if="{{item.timeline[2].status === 'passed'}}">已通过</view>
+            <view class="timeline-status failed" wx:if="{{item.timeline[2].status === 'failed'}}">未通过</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- ✅ 改动4：内推信息显示条件改为 status === 'completed' 且 timeline[2].status === 'passed' -->
+      <view class="referral-info {{item.timeline[2].status === 'passed' ? 'passed' : ''}}" wx:if="{{item.status === 'completed' && item.referralInfo && item.timeline[2].status === 'passed'}}">
+        <view class="referral-header">
+          <view class="referral-title">内推信息</view>
+          <view class="referral-tag">获得内推</view>
+        </view>
+        <view class="referral-content">{{item.referralInfo}}</view>
+
+        <view class="referral-contact-block" wx:if="{{item.referralContact}}">
+          <view class="referral-contact-title">
+            <t-icon name="usergroup" size="32rpx" color="#0052d9" /> 校友联系方式
+          </view>
+          <view class="referral-contact-row">
+            <view class="referral-contact-content" style="width: 316rpx; display: block; box-sizing: border-box">{{item.referralContact}}</view>
+            <t-button size="small" theme="primary" bindtap="copyReferralContact" data-contact="{{item.referralContact}}" class="copy-btn">复制联系方式</t-button>
+          </view>
+        </view>
+
+        <view class="referral-actions" wx:if="{{item.referralCode}}">
+          <view class="referral-code" style="position: relative; left: 14rpx; top: 14rpx; width: 339rpx; display: block; box-sizing: border-box; height: 41rpx">内推码：{{item.referralCode}}</view>
+          <t-button size="small" theme="primary" bindtap="copyReferralCode" data-code="{{item.referralCode}}" class="copy-btn">复制内推码</t-button>
+        </view>
+      </view>
+
+      <view class="application-footer" style="height: 81rpx; display: flex; box-sizing: border-box">
+        <view class="application-date" style="width: 410rpx; display: block; box-sizing: border-box; position: relative; left: 14rpx; top: -2rpx">申请时间：{{item.applyDate}}</view>
+        <t-button 
+          size="small" 
+          theme="primary" 
+          variant="outline" 
+          bindtap="onViewDetailTap" 
+          class="detail-btn" 
+          data-job-id="{{item.jobId}}"
+          catchtap
+        >查看详情</t-button>
+      </view>
+    </view>
+
+    <!-- 登录提示保持不变 -->
+    <view wx:if="{{!isLoggedIn}}" class="preview-hint" style="background: #fffbe6; color: #faad14; padding: 24rpx 32rpx; margin: 24rpx 0 0 0; border-radius: 12rpx; font-size: 28rpx; text-align: center; position: relative; left: 0rpx; top: 10rpx; height: 143rpx; display: block; box-sizing: border-box">
+      <text style="position: relative; left: 0rpx; top: 0rpx">当前为进度预览，登录后可查看全部岗位进度。</text>
+      <t-button size="small" theme="primary" style="margin-left:24rpx;vertical-align:middle;" bindtap="showLoginPrompt">去登录</t-button>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <t-empty icon="info-circle-filled" description="暂无申请记录" />
+    <view class="empty-hint">快去申请心仪的职位吧</view>
+    <t-button theme="primary" size="medium" class="browse-btn" bindtap="onBrowseJobsTap">浏览职位</t-button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{isLoading}}">
+    <t-loading theme="circular" size="40rpx" />
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 加载完毕提示 -->
+  <view class="no-more" wx:if="{{!isLoading && applications.length > 0 && noMoreData}}">
+    没有更多数据了
+  </view>
+</view>

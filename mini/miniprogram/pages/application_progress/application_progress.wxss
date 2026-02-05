@@ -1,0 +1,355 @@
+/* application_progress.wxss */
+page {
+  background-color: #f5f5f5;
+}
+
+.container {
+  padding: 0 0 30rpx 0;
+  box-sizing: border-box;
+}
+
+/* 标签切换栏样式 */
+.tabs-container {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  padding: 0 30rpx;
+}
+
+.tabs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 88rpx;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  font-size: 30rpx;
+  color: #666;
+  position: relative;
+  padding: 20rpx 0;
+}
+
+.tab-item.active {
+  color: #0052d9;
+  font-weight: 500;
+}
+
+.tabs-slider {
+  position: relative;
+  height: 6rpx;
+  background-color: #f5f5f5;
+}
+
+.slider-bar {
+  position: absolute;
+  height: 100%;
+  bottom: 0;
+  background-color: #0052d9;
+  border-radius: 3rpx;
+  transition: all 0.3s;
+}
+
+/* 申请列表样式 */
+.applications-list {
+  padding: 20rpx 30rpx;
+}
+
+.application-item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.application-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.job-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.application-status {
+  font-size: 26rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+
+.application-status.pending {
+  color: #fa8c16;
+  background-color: #fff7e6;
+}
+
+.application-status.processing {
+  color: #1890ff;
+  background-color: #e6f7ff;
+}
+
+.application-status.completed {
+  color: #52c41a;
+  background-color: #f6ffed;
+}
+
+.company-info {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 24rpx;
+}
+
+.separator {
+  margin: 0 10rpx;
+  color: #ddd;
+}
+
+/* 时间线样式 */
+.application-timeline {
+  display: flex;
+  justify-content: space-between;
+  margin: 30rpx 0;
+  position: relative;
+}
+
+.application-timeline::before {
+  content: '';
+  position: absolute;
+  top: 16rpx;
+  left: 16rpx;
+  right: 16rpx;
+  height: 2rpx;
+  background-color: #eee;
+  z-index: 1;
+}
+
+.timeline-item {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.timeline-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin-bottom: 12rpx;
+  border: 4rpx solid #f5f5f5;
+}
+
+.timeline-item.done .timeline-dot {
+  background-color: #0052d9;
+}
+
+.timeline-item.passed .timeline-dot {
+  background-color: #52c41a;
+}
+
+.timeline-item.failed .timeline-dot {
+  background-color: #ff4d4f;
+}
+
+.timeline-content {
+  text-align: center;
+  width: 100%;
+}
+
+.timeline-title {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 6rpx;
+}
+
+.timeline-item.done .timeline-title {
+  color: #0052d9;
+  font-weight: 500;
+}
+
+.timeline-item.done .timeline-title {
+  color: #0052d9;
+  font-weight: 500;
+}
+
+.timeline-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.timeline-status {
+  font-size: 22rpx;
+  color: #52c41a;
+  font-weight: 500;
+  margin-top: 4rpx;
+}
+
+.timeline-status.failed {
+  color: #ff4d4f;
+}
+
+/* 底部样式 */
+.application-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f5f5f5;
+}
+
+.application-date {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 空状态样式 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-hint {
+  font-size: 28rpx;
+  color: #999;
+  margin: 30rpx 0;
+}
+
+.browse-btn {
+  width: 240rpx;
+}
+
+/* 加载状态样式 */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 0;
+  color: #999;
+}
+
+.loading-text {
+  margin-left: 10rpx;
+  font-size: 28rpx;
+}
+
+.no-more {
+  text-align: center;
+  padding: 30rpx;
+  color: #999;
+  font-size: 24rpx;
+}
+
+.referral-info {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background-color: #f0f8ff;
+  border-radius: 12rpx;
+  border: 1rpx solid #e6f7ff;
+  text-align: left;
+}
+
+.referral-info.passed {
+  background-color: #f6ffed;
+  border: 1rpx solid #b7eb8f;
+}
+
+.referral-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.referral-title {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.referral-tag {
+  font-size: 22rpx;
+  color: #52c41a;
+  background-color: #f6ffed;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  border: 1rpx solid #b7eb8f;
+}
+
+.referral-content {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  margin: 10rpx 0;
+  word-break: break-all;
+}
+
+.referral-contact {
+  font-size: 26rpx;
+  color: #666;
+  margin-top: 5rpx;
+  word-break: break-all;
+}
+
+.referral-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 10rpx;
+}
+
+.referral-code {
+  font-size: 32rpx;
+  color: #0052d9;
+  font-weight: 500;
+}
+
+.copy-btn {
+  margin-left: auto;
+  
+}
+
+.referral-contact-block {
+  background: #e6f7ff;
+  border: 1rpx solid #91d5ff;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  margin: 10rpx 0;
+}
+
+.referral-contact-title {
+  font-size: 24rpx;
+  color: #0052d9;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  margin-bottom: 6rpx;
+}
+
+.referral-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.referral-contact-content {
+  font-size: 26rpx;
+  color: #333;
+  word-break: break-all;
+}
+
+.application-footer-actions {
+  display: flex;
+  gap: 16rpx;
+} 

@@ -1,0 +1,106 @@
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="user-info-section" bindtap="onUserInfoTap">
+    <view class="avatar-container">
+      <t-avatar image="{{userInfo.avatarUrl || ''}}" icon="{{userInfo.avatarUrl ? '' : 'user'}}" size="large"/>
+      <view class="avatar-edit" bindtap="onEditAvatarTap">
+        <t-icon name="edit" size="32rpx"/>
+      </view>
+    </view>
+    <view class="user-info">
+      <view class="username-container">
+        <text class="username">{{userInfo.nickName || '未登录'}}</text>
+        <view class="verified-badge" wx:if="{{userInfo.isVerified}}">
+          <t-icon name="check-circle-filled" size="32rpx" color="#0052d9"/>
+          <text>已认证</text>
+        </view>
+      </view>
+      <view class="user-role">
+        <t-tag theme="primary" variant="light" size="small">{{userInfo.role || '游客'}}</t-tag>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计 -->
+  <view class="stats-section">
+    <view class="stats-item" bindtap="onNavigateToMyPosts">
+      <text class="stats-num">{{stats.postsCount || 0}}</text>
+      <text class="stats-label">我的发布</text>
+    </view>
+    <view class="stats-item" bindtap="onNavigateToMyApplies">
+      <text class="stats-num">{{stats.appliesCount || 0}}</text>
+      <text class="stats-label">我的申请</text>
+    </view>
+    <view class="stats-item" bindtap="onNavigateToMyFavorites">
+      <text class="stats-num">{{stats.favoritesCount || 0}}</text>
+      <text class="stats-label">我的收藏</text>
+    </view>
+  </view>
+
+  <!-- 菜单 -->
+  <view class="menu-section">
+    <view class="menu-group">
+      <view class="menu-item" bindtap="onNavigateToVerify">
+        <view class="menu-item-left">
+          <t-icon name="user-circle" size="48rpx" color="#0052d9"/>
+          <text class="menu-item-text">身份认证</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#bbb"/>
+      </view>
+      <view class="menu-item" wx:if="{{userType === 'alumni' || userType === 'teacher'}}" bindtap="onNavigateToMyPosts">
+        <view class="menu-item-left">
+          <t-icon name="edit" size="48rpx" color="#0052d9"/>
+          <text class="menu-item-text">我的发布</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#bbb"/>
+      </view>
+      <view class="menu-item" wx:if="{{userType === 'student'}}" bindtap="onNavigateToMyApplies">
+        <view class="menu-item-left">
+          <t-icon name="file-paste" size="48rpx" color="#0052d9"/>
+          <text class="menu-item-text">我的申请</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#bbb"/>
+      </view>
+    </view>
+
+    <view class="menu-group">
+      <view class="menu-item" bindtap="onNavigateToMyFavorites">
+        <view class="menu-item-left">
+          <t-icon name="heart" size="48rpx" color="#0052d9"/>
+          <text class="menu-item-text">我的收藏</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#bbb"/>
+      </view>
+      <view class="menu-item" bindtap="onNavigateToTeacherStats">
+        <view class="menu-item-left">
+          <t-icon name="chart-bar" size="48rpx" color="#0052d9"/>
+          <text class="menu-item-text">职位统计</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#bbb"/>
+      </view>
+      <view class="menu-item" bindtap="onNavigateToSettings">
+        <view class="menu-item-left">
+          <t-icon name="setting" size="48rpx" color="#0052d9"/>
+          <text class="menu-item-text">设置</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#bbb"/>
+      </view>
+      <!-- 合并退出和注销，未登录时不显示 -->
+      <view class="menu-item" wx:if="{{isLoggedIn}}" bindtap="onAccountOptionsTap">
+        <view class="menu-item-left">
+          <t-icon name="logout" size="48rpx" color="#ff4d4f"/>
+          <text class="menu-item-text" style="color:#ff4d4f">退出 / 注销</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部 -->
+  <view class="footer-section">
+    <view class="about-link" bindtap="onNavigateToAbout">关于我们</view>
+    <view class="version-info">版本号: 1.0.0</view>
+  </view>
+</view>
+
+<t-dialog visible="{{showLoginDialog}}" title="提示" content="您尚未登录，请先登录后使用完整功能"
+  confirm-btn="去登录" cancel-btn="取消" bind:confirm="onLoginDialogConfirm" bind:cancel="onLoginDialogCancel"/>

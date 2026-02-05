@@ -1,0 +1,181 @@
+<!-- <view class="container">
+  <view class="job-header">
+    <view class="job-title">{{jobDetail.title}}</view>
+    <view class="job-salary">{{jobDetail.salary}}</view>
+    <view class="job-info">
+      <view class="info-item">
+        <t-icon name="location" size="32rpx" />
+        <text>{{jobDetail.location}}</text>
+      </view>
+      <view class="info-item">
+        <t-icon name="time" size="32rpx" />
+        <text>发布于 {{jobDetail.formattedDate}}</text>
+      </view>
+    </view>
+    <view class="job-tags">
+      <t-tag wx:for="{{jobDetail.tags}}" wx:key="*this" variant="light" size="small" style="margin-right: 12rpx;">{{item}}</t-tag>
+    </view>
+  </view>
+
+  <view class="section association-section" style="border-left: 8rpx solid #0052d9; background: #f0f7ff; margin-bottom: 20rpx;">
+    <view class="section-title">
+      <t-icon name="user-talk" size="36rpx" color="#0052d9" />
+      <text style="color: #0052d9; font-weight: bold;">精准关联推介</text>
+    </view>
+    <view class="section-content">
+      <view class="teacher-info" style="font-weight: 500; color: #333;">{{jobDetail.association.teacher}}</view>
+      <block wx:if="{{filteredStudents.length > 0}}">
+        <view class="student-info" wx:for="{{filteredStudents}}" wx:key="name" style="border-top: 1rpx dashed #ccc; margin-top: 15rpx; padding-top: 15rpx;">
+          <view class="student-detail">{{item.info}}</view>
+          <view class="teacher-comment" style="background: #fff; padding: 10rpx; border-radius: 8rpx; margin-top: 10rpx;">
+            <text style="color: #0052d9; font-weight: bold;">教师评价：</text>{{item.comment}}
+          </view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="student-info" style="border-top: 1rpx dashed #ccc; margin-top: 15rpx; padding-top: 15rpx;">
+          <view class="student-detail">学生贾明，软件工程223班，成绩92分。</view>
+          <view class="teacher-comment" style="background: #fff; padding: 10rpx; border-radius: 8rpx; margin-top: 10rpx;">
+            <text style="color: #0052d9; font-weight: bold;">教师评价：</text>具备优秀的开发潜质，重点推荐。
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="section ai-report-section" wx:if="{{aiAssessment}}" style="border: 2rpx solid #0052d9; background: #eef3fe; margin-bottom: 20rpx; padding: 24rpx; border-radius: 12rpx;">
+    <view class="section-title" style="display: flex; align-items: center; margin-bottom: 16rpx;">
+      <t-icon name="undertake" size="36rpx" color="#0052d9" />
+      <text style="color: #0052d9; font-weight: bold; margin-left: 10rpx;">AI 匹配度评估</text>
+      <view style="margin-left: auto; color: #0052d9; font-size: 36rpx; font-weight: bold;">{{aiAssessment.score}}分</view>
+    </view>
+    <view class="ai-content" style="font-size: 26rpx; color: #444; line-height: 1.6;">
+      <text>{{aiAssessment.reason}}</text>
+    </view>
+  </view>
+
+  <view class="section recommender-section">
+    <view class="section-title">
+      <t-icon name="chat" size="36rpx" color="#0052d9" />
+      <text>内推者想说</text>
+    </view>
+    <view class="section-content">
+      <rich-text nodes="{{recommenderNodes}}"></rich-text>
+    </view>
+  </view>
+
+  <view class="section publisher-section">
+    <view class="section-title">
+      <t-icon name="user" size="36rpx" color="#0052d9" />
+      <text>发布人信息</text>
+    </view>
+    <view class="publisher-container">
+      <view class="publisher-info">
+        <t-avatar image="{{jobDetail.publisher.avatar}}" icon="user" size="small" />
+        <text class="publisher-name" style="margin: 0 15rpx;">{{jobDetail.publisher.name}}</text>
+        <t-tag variant="light" theme="primary" size="small">{{jobDetail.publisher.tag}}</t-tag>
+      </view>
+    </view>
+  </view>
+
+  <view class="jobid-info" style="text-align:center; color:#999; margin: 40rpx 0; font-size: 24rpx;">
+    <text>职位ID：{{jobId}}（搜索栏输入ID快速定位）</text>
+  </view>
+  
+  <view style="height: 220rpx;"></view>
+</view>
+
+<view class="footer-actions" style="display: flex; align-items: center; padding: 20rpx 30rpx; background: #fff; border-top: 1rpx solid #eee; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; padding-bottom: calc(20rpx + env(safe-area-inset-bottom));">
+  <view class="favor-btn {{isFavorite ? 'active' : ''}}" bindtap="toggleFavorite" style="margin-right: 30rpx; display: flex; flex-direction: column; align-items: center;">
+    <t-icon name="{{isFavorite ? 'heart-filled' : 'heart'}}" size="48rpx" color="{{isFavorite ? '#ff4d4f' : '#999'}}" />
+    <text style="font-size: 20rpx; color: #666; margin-top: 4rpx;">{{isFavorite ? '已收藏' : '收藏'}}</text>
+  </view>
+  
+  <view style="flex: 1; display: flex; gap: 20rpx;">
+    <t-button 
+      theme="light" 
+      block 
+      class="ai-btn" 
+      bindtap="runAiAssessment" 
+      loading="{{isAiLoading}}"
+      style="flex: 1; border: 1rpx solid #0052d9; color: #0052d9;"
+    >AI 评估</t-button>
+    
+    <t-button 
+      theme="primary" 
+      block 
+      class="apply-btn" 
+      bindtap="applyJob" 
+      disabled="{{!aiAssessment}}"
+      style="flex: 1;"
+    >立即投递</t-button>
+  </view>
+</view> -->
+<view class="container">
+  <view class="job-header">
+    <view class="job-title">{{jobDetail.title}}</view>
+    <view class="job-salary">{{jobDetail.salary}}</view>
+    <view class="job-info">
+      <view class="info-item"><t-icon name="location" size="32rpx" /><text>{{jobDetail.location}}</text></view>
+      <view class="info-item"><t-icon name="time" size="32rpx" /><text>发布于 {{jobDetail.formattedDate}}</text></view>
+    </view>
+    <view class="job-tags">
+      <t-tag wx:for="{{jobDetail.tags}}" wx:key="*this" variant="light" size="small" style="margin-right: 12rpx;">{{item}}</t-tag>
+    </view>
+  </view>
+
+  <view class="section description-section">
+    <view class="section-title">
+      <t-icon name="assignment" size="36rpx" color="#0052d9" />
+      <text>职位描述</text>
+    </view>
+    <view class="section-content">
+      <rich-text nodes="{{jobDescriptionNodes}}"></rich-text>
+    </view>
+  </view>
+
+  <view class="section ai-report-section" wx:if="{{aiAssessment}}" style="border: 2rpx solid #0052d9; background: #eef3fe; padding: 24rpx; border-radius: 12rpx;">
+    <view class="section-title" style="display: flex; align-items: center; margin-bottom: 16rpx;">
+      <t-icon name="undertake" size="36rpx" color="#0052d9" />
+      <text style="color: #0052d9; font-weight: bold; margin-left: 10rpx;">AI 匹配度评估</text>
+      <view style="margin-left: auto; color: #0052d9; font-size: 36rpx; font-weight: bold;">{{aiAssessment.score}}分</view>
+    </view>
+    <view class="ai-content" style="font-size: 26rpx; color: #444; line-height: 1.6;">{{aiAssessment.reason}}</view>
+  </view>
+
+  <view class="section recommender-section">
+    <view class="section-title">
+      <t-icon name="chat" size="36rpx" color="#0052d9" />
+      <text>内推者想说</text>
+    </view>
+    <view class="section-content">
+      <rich-text nodes="{{recommenderNodes}}"></rich-text>
+    </view>
+  </view>
+
+  <view class="section publisher-section">
+    <view class="section-title"><t-icon name="user" size="36rpx" color="#0052d9" /><text>发布人信息</text></view>
+    <view class="publisher-container">
+      <view class="publisher-info">
+        <t-avatar image="{{jobDetail.publisher.avatar}}" icon="user" size="small" />
+        <text class="publisher-name" style="margin: 0 15rpx;">{{jobDetail.publisher.name}}</text>
+        <t-tag variant="light" theme="primary" size="small">{{jobDetail.publisher.tag}}</t-tag>
+      </view>
+    </view>
+  </view>
+
+  <view class="jobid-info" style="text-align:center; color:#999; margin: 40rpx 0; font-size: 24rpx;">
+    <text>职位ID：{{jobId}}</text>
+  </view>
+  <view style="height: 220rpx;"></view>
+</view>
+
+<view class="footer-actions">
+  <view class="favor-btn {{isFavorite ? 'active' : ''}}" bindtap="toggleFavorite">
+    <t-icon name="{{isFavorite ? 'heart-filled' : 'heart'}}" size="48rpx" color="{{isFavorite ? '#ff4d4f' : '#999'}}" />
+  </view>
+  <view style="flex: 1; display: flex; gap: 20rpx;">
+    <t-button theme="light" block bindtap="runAiAssessment" loading="{{isAiLoading}}" style="flex: 1; border: 1rpx solid #0052d9; color: #0052d9;">AI 评估</t-button>
+    <t-button theme="primary" block bindtap="applyJob" disabled="{{!aiAssessment}}" style="flex: 1;">立即投递</t-button>
+  </view>
+</view>

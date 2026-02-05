@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "module": "CommonJS",
+    "target": "ES2020",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "alwaysStrict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictPropertyInitialization": true,
+    "lib": ["ES2020"],
+    "typeRoots": [
+      "./typings"
+    ],
+    "outDir": "./dist", // 确保编译后的文件输出到 dist 目录
+    "rootDir": "./miniprogram"  // 确保源文件在 miniprogram 目录
+  },
+  "include": [
+    "./miniprogram/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "paths": {
+    "tdesign-miniprogram/*": ["./miniprogram/miniprogram_npm/tdesign-miniprogram/*"]
+  }
+}

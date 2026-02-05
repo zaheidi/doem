@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>酱菜内推小程序原型</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    
+    body {
+      background-color: #f0f0f0;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    
+    .prototype-container {
+      position: relative;
+      width: 390px;
+      height: 844px;
+      background: #fff;
+      border-radius: 44px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: 10px solid #000;
+      margin-bottom: 40px;
+    }
+    
+    .prototype-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .device-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 30px;
+      background-color: #000;
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+      z-index: 10;
+    }
+    
+    .prototype-title {
+      text-align: center;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .prototype-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- 首页 -->
+  <div class="prototype-wrapper">
+    <h2 class="prototype-title">首页</h2>
+    <div class="prototype-container">
+      <div class="device-notch"></div>
+      <iframe src="prototype/pages/home.html" class="prototype-frame" id="home-frame"></iframe>
+    </div>
+  </div>
+  
+  <!-- 职位详情页 -->
+  <div class="prototype-wrapper">
+    <h2 class="prototype-title">职位详情</h2>
+    <div class="prototype-container">
+      <div class="device-notch"></div>
+      <iframe src="prototype/pages/job_detail.html" class="prototype-frame" id="job-detail-frame"></iframe>
+    </div>
+  </div>
+  
+  <!-- 发布职位页 -->
+  <div class="prototype-wrapper">
+    <h2 class="prototype-title">发布职位</h2>
+    <div class="prototype-container">
+      <div class="device-notch"></div>
+      <iframe src="prototype/pages/post_job.html" class="prototype-frame" id="post-job-frame"></iframe>
+    </div>
+  </div>
+  
+  <!-- 进度通知页 -->
+  <div class="prototype-wrapper">
+    <h2 class="prototype-title">进度通知</h2>
+    <div class="prototype-container">
+      <div class="device-notch"></div>
+      <iframe src="prototype/pages/progress.html" class="prototype-frame" id="progress-frame"></iframe>
+    </div>
+  </div>
+  
+  <!-- 个人中心页 -->
+  <div class="prototype-wrapper">
+    <h2 class="prototype-title">个人中心</h2>
+    <div class="prototype-container">
+      <div class="device-notch"></div>
+      <iframe src="prototype/pages/profile.html" class="prototype-frame" id="profile-frame"></iframe>
+    </div>
+  </div>
+  
+  <!-- 空状态页 -->
+  <div class="prototype-wrapper">
+    <h2 class="prototype-title">空状态</h2>
+    <div class="prototype-container">
+      <div class="device-notch"></div>
+      <iframe src="prototype/pages/empty_state.html" class="prototype-frame" id="empty-state-frame"></iframe>
+    </div>
+  </div>
+  
+  <!-- 老师端数据统计页 -->
+  <div class="prototype-wrapper">
+    <h2 class="prototype-title">老师端数据统计</h2>
+    <div class="prototype-container">
+      <div class="device-notch"></div>
+      <iframe src="prototype/pages/teacher_stats.html" class="prototype-frame" id="teacher-stats-frame"></iframe>
+    </div>
+  </div>
+
+  <script>
+    // 监听iframe之间的通信
+    window.addEventListener('message', function(event) {
+      // 处理导航消息
+      if (event.data.startsWith('navigate:')) {
+        const target = event.data.split(':')[1];
+        
+        // 根据目标页面进行导航
+        switch (target) {
+          case 'home':
+            document.querySelectorAll('.prototype-frame').forEach(frame => {
+              frame.contentWindow.postMessage('reset', '*');
+            });
+            window.scrollTo({
+              top: document.getElementById('home-frame').closest('.prototype-wrapper').offsetTop - 20,
+              behavior: 'smooth'
+            });
+            break;
+          case 'job_detail':
+            window.scrollTo({
+              top: document.getElementById('job-detail-frame').closest('.prototype-wrapper').offsetTop - 20,
+              behavior: 'smooth'
+            });
+            break;
+          case 'post_job':
+            window.scrollTo({
+              top: document.getElementById('post-job-frame').closest('.prototype-wrapper').offsetTop - 20,
+              behavior: 'smooth'
+            });
+            break;
+          case 'progress':
+            window.scrollTo({
+              top: document.getElementById('progress-frame').closest('.prototype-wrapper').offsetTop - 20,
+              behavior: 'smooth'
+            });
+            break;
+          case 'profile':
+            window.scrollTo({
+              top: document.getElementById('profile-frame').closest('.prototype-wrapper').offsetTop - 20,
+              behavior: 'smooth'
+            });
+            break;
+          case 'empty_state':
+            window.scrollTo({
+              top: document.getElementById('empty-state-frame').closest('.prototype-wrapper').offsetTop - 20,
+              behavior: 'smooth'
+            });
+            break;
+          case 'teacher_stats':
+            window.scrollTo({
+              top: document.getElementById('teacher-stats-frame').closest('.prototype-wrapper').offsetTop - 20,
+              behavior: 'smooth'
+            });
+            break;
+        }
+      }
+    });
+  </script>
+</body>
+</html> 
