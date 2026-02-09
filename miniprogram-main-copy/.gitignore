@@ -1,0 +1,12 @@
+node_modules
+.env
+.env.*
+miniprogram_npm
+dist
+.dist
+.DS_Store
+.idea
+.vscode
+.wxml
+
+

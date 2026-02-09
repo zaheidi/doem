@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 't';
+  src: url('../fonts/t.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* 本地字体覆盖 */
+@font-face {
+    font-family: 't';
+    src: url('../fonts/t.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+  } 

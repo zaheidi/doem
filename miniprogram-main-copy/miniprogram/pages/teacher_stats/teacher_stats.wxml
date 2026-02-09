@@ -1,0 +1,285 @@
+<!--teacher_stats.wxml-->
+<view class="container">
+  <!-- 数据概览区域 -->
+  <view class="overview-section" style="display: flex; gap: 16rpx; margin-bottom: 24rpx;">
+      <view class="stats-card">
+        <view class="stats-value">{{overview.totalStudents}}</view>
+        <view class="stats-label">总学生数</view>
+      </view>
+      <view class="stats-card">
+        <view class="stats-value">{{overview.totalApplies}}</view>
+        <view class="stats-label">总申请数</view>
+      </view>
+      <view class="stats-card">
+        <view class="stats-value">{{overview.pendingApplies}}</view>
+        <view class="stats-label">待处理申请</view>
+      </view>
+      <view class="stats-card">
+        <view class="stats-value">{{overview.passRate}}%</view>
+        <view class="stats-label">通过率</view>
+    </view>
+  </view>
+
+  <!-- 申请状态分布（环形图替换为统计卡片） -->
+  <view class="chart-section">
+    <view class="section-header">
+      <view class="section-title">申请状态分布</view>
+    </view>
+    <view class="status-distribution">
+      <view class="status-item" wx:for="{{statusDistribution}}" wx:key="status">
+        <view class="status-progress">
+          <t-progress percentage="{{item.percentage}}" color="{{item.color}}" theme="circle" />
+        </view>
+        <view class="status-info">
+          <view class="status-name">{{item.status}}</view>
+          <view class="status-count">{{item.count}}</view>
+          <view class="status-percent">{{item.percentage}}%</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 申请趋势区域（折线图替换为表格） -->
+  <view class="chart-section">
+    <view class="section-header">
+      <view class="section-title">申请趋势</view>
+      <view class="filter-group">
+        <view class="time-filter">
+          <view 
+            wx:for="{{timeFilters}}" 
+            wx:key="value"
+            class="filter-item {{timeFilterActive === item.value ? 'active' : ''}}" 
+            bindtap="onTimeFilterChange" 
+            data-value="{{item.value}}"
+          >{{item.label}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="trend-table-container">
+      <view class="table-header">
+        <view class="table-cell date-cell">日期</view>
+        <view class="table-cell count-cell">申请数</view>
+        <view class="table-cell bar-cell">趋势</view>
+      </view>
+      <view class="table-row" wx:for="{{currentTrendData}}" wx:key="date">
+        <view class="table-cell date-cell">{{item.date}}</view>
+        <view class="table-cell count-cell">{{item.count}}</view>
+        <view class="table-cell bar-cell">
+          <view class="trend-bar" style="width: {{item.count / 100 * 100}}%;"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 岗位热度排行（柱状图替换为表格） -->
+  <view class="chart-section">
+    <view class="section-header">
+      <view class="section-title">岗位热度排行</view>
+    </view>
+    <view class="hot-jobs-container">
+      <view class="table-row" wx:for="{{hotJobsData}}" wx:key="title">
+        <view class="job-rank">{{index + 1}}</view>
+        <view class="job-info">
+          <view class="job-title">{{item.title}}</view>
+          <view class="job-count">{{item.count}}人申请</view>
+        </view>
+        <view class="job-bar-container">
+          <view class="job-bar" style="width: {{item.percentage}}%;"></view>
+          <view class="job-percent">{{item.percentage}}%</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 发布内推岗位较多的校友 -->
+  <view class="stats-section">
+    <view class="section-header">
+      <view class="section-title">发布内推岗位较多的校友</view>
+      <view class="view-all" bindtap="viewMoreTopAlumni">查看全部</view>
+    </view>
+    
+    <view class="stats-card-list">
+      <view class="alumni-card" wx:for="{{topReferralPosters}}" wx:key="alumnusId">
+        <view class="alumni-info">
+          <t-avatar image="{{item.avatar}}" size="medium" />
+          <view class="alumni-details">
+            <view class="alumni-name">{{item.name}}</view>
+            <view class="alumni-company">{{item.company}}</view>
+            <view class="alumni-department">{{item.graduationYear}}届 · {{item.department}}</view>
+          </view>
+        </view>
+        <view class="alumni-stats">
+          <view class="alumni-value">{{item.referralsPostedCount}}</view>
+          <view class="alumni-label">发布岗位数</view>
+          <view class="thank-btn" bindtap="thankAlumnus" data-id="{{item.alumnusId}}">感谢校友</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 处理职位申请响应度低的校友 -->
+  <view class="stats-section">
+    <view class="section-header">
+      <view class="section-title">响应度低的校友</view>
+      <view class="view-all" bindtap="viewMoreLowResponseAlumni">查看全部</view>
+    </view>
+    
+    <view class="stats-card-list">
+      <view class="alumni-card" wx:for="{{lowResponsivenessAlumni}}" wx:key="alumnusId">
+        <view class="alumni-info">
+          <t-avatar image="{{item.avatar}}" size="medium" />
+          <view class="alumni-details">
+            <view class="alumni-name">{{item.name}}</view>
+            <view class="alumni-company">{{item.company}}</view>
+            <view class="alumni-pending">待处理申请: <text class="pending-count">{{item.pendingApplicationsCount}}</text></view>
+          </view>
+        </view>
+        <view class="alumni-stats">
+          <view class="alumni-activity">
+            <view class="activity-label">最后活跃</view>
+            <view class="activity-time">{{item.lastActiveOnReferral}}</view>
+          </view>
+          <view class="contact-btn" bindtap="contactAlumnus" data-id="{{item.alumnusId}}">提醒校友</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 申请职位成功率较高的学生 -->
+  <view class="stats-section">
+    <view class="section-header">
+      <view class="section-title">申请成功率高的学生</view>
+      <view class="view-all" bindtap="viewMoreSuccessfulStudents">查看全部</view>
+    </view>
+    
+    <view class="stats-card-list">
+      <view class="student-card" wx:for="{{highSuccessRateStudents}}" wx:key="studentId">
+        <view class="student-info">
+          <t-avatar image="{{item.avatar}}" size="medium" />
+          <view class="student-details">
+            <view class="student-name">{{item.name}}</view>
+            <view class="student-major">{{item.department}} · {{item.major}}</view>
+            <view class="student-rate">成功率: <text class="success-rate">{{item.successRate * 100}}%</text></view>
+          </view>
+        </view>
+        <view class="student-stats">
+          <view class="application-info">
+            <view class="application-count">{{item.applicationsMade}}</view>
+            <view class="application-label">申请数</view>
+          </view>
+          <view class="application-info">
+            <view class="success-count">{{item.applicationsSuccessful}}</view>
+            <view class="application-label">成功数</view>
+          </view>
+          <view class="invite-btn" bindtap="inviteShareExperience" data-id="{{item.studentId}}">邀请分享</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近申请区域 -->
+  <view class="recent-section">
+    <view class="section-header">
+      <view class="section-title">最近申请</view>
+      <view class="view-all" bindtap="navigateToAllApplications">查看全部</view>
+    </view>
+    
+    <view class="applications-list">
+      <view 
+        class="application-item" 
+        wx:for="{{recentApplications}}" 
+        wx:key="id"
+        bindtap="viewApplicationDetail"
+        data-id="{{item.id}}"
+      >
+        <view class="application-header">
+          <view class="student-info">
+            <t-avatar image="{{item.studentAvatar}}" size="small" />
+            <view class="student-detail">
+              <view class="student-name">{{item.studentName}}</view>
+              <view class="student-class">{{item.studentClass}}</view>
+            </view>
+          </view>
+          <view class="application-status {{item.status}}">{{item.statusText}}</view>
+        </view>
+        
+        <view class="application-job">
+          <view class="job-title">{{item.jobTitle}}</view>
+          <view class="job-company">{{item.company}}</view>
+        </view>
+        
+        <view class="application-footer">
+          <view class="apply-time" style="width: 566rpx; display: block; box-sizing: border-box">申请时间: {{item.applyTime}}</view>
+          <t-button 
+            size="small" 
+            theme="primary" 
+            bindtap="handleApplication" 
+            data-id="{{item.id}}"
+            catchtap
+          >处理</t-button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 筛选弹出层 -->
+<t-popup visible="{{showMoreFilters}}" bind:visible-change="onPopupVisibleChange" placement="bottom">
+  <view class="filter-popup">
+    <view class="filter-popup-header">
+      <view class="popup-title">筛选条件</view>
+      <view class="popup-close" bindtap="closeMoreFilters">
+        <t-icon name="close" size="40rpx" />
+      </view>
+    </view>
+    
+    <view class="filter-group">
+      <view class="filter-label">申请状态</view>
+      <view class="filter-options">
+        <view 
+          class="filter-option {{statusFilter === 'all' ? 'active' : ''}}" 
+          bindtap="onStatusFilterChange" 
+          data-value="all"
+        >全部</view>
+        <view 
+          class="filter-option {{statusFilter === 'pending' ? 'active' : ''}}" 
+          bindtap="onStatusFilterChange" 
+          data-value="pending"
+        >待处理</view>
+        <view 
+          class="filter-option {{statusFilter === 'approved' ? 'active' : ''}}" 
+          bindtap="onStatusFilterChange" 
+          data-value="approved"
+        >已通过</view>
+        <view 
+          class="filter-option {{statusFilter === 'rejected' ? 'active' : ''}}" 
+          bindtap="onStatusFilterChange" 
+          data-value="rejected"
+        >已拒绝</view>
+      </view>
+    </view>
+    
+    <view class="filter-group">
+      <view class="filter-label">班级</view>
+      <view class="filter-options">
+        <view 
+          class="filter-option {{classFilter === 'all' ? 'active' : ''}}" 
+          bindtap="onClassFilterChange" 
+          data-value="all"
+        >全部班级</view>
+        <view 
+          wx:for="{{classes}}" 
+          wx:key="value"
+          class="filter-option {{classFilter === item.value ? 'active' : ''}}" 
+          bindtap="onClassFilterChange" 
+          data-value="{{item.value}}"
+        >{{item.label}}</view>
+      </view>
+    </view>
+    
+    <view class="filter-buttons">
+      <t-button theme="default" block bindtap="resetFilters">重置</t-button>
+      <t-button theme="primary" block bindtap="applyFilters">确认</t-button>
+    </view>
+  </view>
+</t-popup> 

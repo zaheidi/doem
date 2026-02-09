@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>进度通知</title>
+  <link rel="stylesheet" href="https://unpkg.com/tdesign-mobile-ui/dist/tdesign.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --safe-area-inset-top: env(safe-area-inset-top);
+      --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+    
+    .status-bar {
+      height: 44px;
+      background-color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      padding-top: var(--safe-area-inset-top);
+      position: relative;
+      z-index: 10;
+    }
+    
+    .status-bar .time {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .status-bar .icons {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .nav-bar {
+      height: 57px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .nav-bar .title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .tab-bar {
+      height: 83px;
+      background-color: #fff;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      border-top: 1px solid #f0f0f0;
+      padding-bottom: var(--safe-area-inset-bottom);
+    }
+    
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #999;
+    }
+    
+    .tab-item.active {
+      color: #0052d9;
+    }
+    
+    .tab-item .icon {
+      font-size: 24px;
+      margin-bottom: 2px;
+    }
+    
+    .content {
+      height: calc(100% - 44px - 57px - 83px);
+      padding: 15px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* 进度通知页面样式 */
+    .progress-tabs {
+      display: flex;
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      position: relative;
+      padding: 2px;
+    }
+    
+    .progress-tab {
+      flex: 1;
+      text-align: center;
+      padding: 12px 0;
+      font-size: 14px;
+      color: #666;
+      position: relative;
+      z-index: 1;
+      transition: color 0.3s;
+    }
+    
+    .progress-tab.active {
+      color: #0052d9;
+      font-weight: 500;
+    }
+    
+    .progress-slider {
+      position: absolute;
+      height: calc(100% - 4px);
+      background-color: #f5f5f5;
+      border-radius: 6px;
+      top: 2px;
+      transition: left 0.3s, width 0.3s;
+    }
+    
+    .notification-list {
+      margin-bottom: 20px;
+    }
+    
+    .notification-item {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .notification-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .notification-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #e6f7ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      color: #0052d9;
+    }
+    
+    .notification-info {
+      flex: 1;
+    }
+    
+    .notification-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .notification-time {
+      font-size: 12px;
+      color: #999;
+    }
+    
+    .notification-content {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    
+    .notification-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .notification-company {
+      font-size: 12px;
+      color: #999;
+    }
+    
+    .notification-status {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    
+    .status-pending {
+      background-color: #fff7e6;
+      color: #fa8c16;
+    }
+    
+    .status-success {
+      background-color: #f6ffed;
+      color: #52c41a;
+    }
+    
+    .status-rejected {
+      background-color: #fff1f0;
+      color: #ff4d4f;
+    }
+    
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 50px 0;
+    }
+    
+    .empty-icon {
+      font-size: 60px;
+      color: #d9d9d9;
+      margin-bottom: 20px;
+    }
+    
+    .empty-text {
+      font-size: 14px;
+      color: #999;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <div class="time">12:30</div>
+    <div class="icons">
+      <span><i class="fas fa-signal"></i></span>
+      <span><i class="fas fa-wifi"></i></span>
+      <span><i class="fas fa-battery-three-quarters"></i></span>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <div class="title">进度通知</div>
+  </div>
+  <div class="content">
+    <!-- 进度标签页 -->
+    <div class="progress-tabs">
+      <div class="progress-tab active" data-tab="all">全部</div>
+      <div class="progress-tab" data-tab="pending">待处理</div>
+      <div class="progress-tab" data-tab="success">已通过</div>
+      <div class="progress-tab" data-tab="rejected">已拒绝</div>
+      <div class="progress-slider" id="progress-slider"></div>
+    </div>
+    
+    <!-- 通知列表 -->
+    <div class="notification-list" id="all-tab">
+      <!-- 通知项 - 待处理 -->
+      <div class="notification-item" data-status="pending">
+        <div class="notification-header">
+          <div class="notification-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="notification-info">
+            <div class="notification-title">前端开发工程师</div>
+            <div class="notification-time">2023-05-20 14:30</div>
+          </div>
+        </div>
+        <div class="notification-content">
+          您的简历已投递成功，请耐心等待企业反馈。
+        </div>
+        <div class="notification-footer">
+          <div class="notification-company">腾讯科技</div>
+          <div class="notification-status status-pending">待处理</div>
+        </div>
+      </div>
+      
+      <!-- 通知项 - 已通过 -->
+      <div class="notification-item" data-status="success">
+        <div class="notification-header">
+          <div class="notification-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="notification-info">
+            <div class="notification-title">产品经理</div>
+            <div class="notification-time">2023-05-18 09:15</div>
+          </div>
+        </div>
+        <div class="notification-content">
+          恭喜您通过简历筛选，请准备参加面试。面试时间：2023-05-25 14:00，地点：北京市海淀区中关村软件园二期。
+        </div>
+        <div class="notification-footer">
+          <div class="notification-company">阿里巴巴</div>
+          <div class="notification-status status-success">已通过</div>
+        </div>
+      </div>
+      
+      <!-- 通知项 - 已拒绝 -->
+      <div class="notification-item" data-status="rejected">
+        <div class="notification-header">
+          <div class="notification-icon">
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="notification-info">
+            <div class="notification-title">Java后端开发</div>
+            <div class="notification-time">2023-05-15 16:45</div>
+          </div>
+        </div>
+        <div class="notification-content">
+          很遗憾，您的简历未能通过筛选。感谢您的关注，祝您求职顺利。
+        </div>
+        <div class="notification-footer">
+          <div class="notification-company">百度</div>
+          <div class="notification-status status-rejected">已拒绝</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 空状态 -->
+    <div class="empty-state" id="empty-state" style="display: none;">
+      <div class="empty-icon">
+        <i class="fas fa-inbox"></i>
+      </div>
+      <div class="empty-text">
+        暂无相关通知
+      </div>
+    </div>
+  </div>
+  
+  <div class="tab-bar">
+    <div class="tab-item" id="home-tab">
+      <div class="icon"><i class="fas fa-home"></i></div>
+      <div>职位</div>
+    </div>
+    <div class="tab-item active" id="progress-tab">
+      <div class="icon"><i class="fas fa-chart-bar"></i></div>
+      <div>进度</div>
+    </div>
+    <div class="tab-item" id="profile-tab">
+      <div class="icon"><i class="fas fa-user"></i></div>
+      <div>我的</div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 设置时间
+      const timeElement = document.querySelector('.status-bar .time');
+      const updateTime = () => {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        timeElement.textContent = `${hours}:${minutes}`;
+      };
+      updateTime();
+      setInterval(updateTime, 60000);
+      
+      // 标签栏导航
+      document.getElementById('home-tab').addEventListener('click', function() {
+        window.parent.postMessage('navigate:home', '*');
+      });
+      
+      document.getElementById('profile-tab').addEventListener('click', function() {
+        window.parent.postMessage('navigate:profile', '*');
+      });
+      
+      // 进度标签切换
+      const progressTabs = document.querySelectorAll('.progress-tab');
+      const progressSlider = document.getElementById('progress-slider');
+      const notificationItems = document.querySelectorAll('.notification-item');
+      const emptyState = document.getElementById('empty-state');
+      
+      // 初始化滑块位置和宽度
+      function updateSliderPosition() {
+        const activeTab = document.querySelector('.progress-tab.active');
+        if (activeTab) {
+          const tabWidth = activeTab.offsetWidth;
+          const tabLeft = activeTab.offsetLeft;
+          progressSlider.style.width = `${tabWidth}px`;
+          progressSlider.style.left = `${tabLeft}px`;
+        }
+      }
+      
+      // 页面加载时初始化滑块
+      updateSliderPosition();
+      window.addEventListener('resize', updateSliderPosition);
+      
+      progressTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // 移除所有标签的active类
+          progressTabs.forEach(t => t.classList.remove('active'));
+          // 给当前点击的标签添加active类
+          this.classList.add('active');
+          
+          // 更新滑块位置
+          updateSliderPosition();
+          
+          const tabType = this.getAttribute('data-tab');
+          
+          // 筛选通知项
+          let hasItems = false;
+          
+          if (tabType === 'all') {
+            notificationItems.forEach(item => {
+              item.style.display = 'block';
+              hasItems = true;
+            });
+          } else {
+            notificationItems.forEach(item => {
+              if (item.getAttribute('data-status') === tabType) {
+                item.style.display = 'block';
+                hasItems = true;
+              } else {
+                item.style.display = 'none';
+              }
+            });
+          }
+          
+          // 显示或隐藏空状态
+          emptyState.style.display = hasItems ? 'none' : 'flex';
+        });
+      });
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,56 @@
+<!--pages/alumna_job_applications/alumna_job_applications.wxml-->
+<view class="container">
+  <view class="header-section">
+    <view class="header-content">
+      <view class="welcome-group">
+        <text class="welcome-title">内推看板</text>
+        <text class="welcome-sub">挖掘优秀学弟学妹</text>
+      </view>
+      <view class="stats-badge">
+        <text class="stats-label">待处理投递</text>
+        <text class="stats-value">{{applicantList.length}}</text>
+      </view>
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="main-content" refresher-enabled="{{true}}" bindrefresherrefresh="onPullDownRefresh" refresher-triggered="{{loading}}">
+    
+    <view wx:if="{{loading && applicantList.length === 0}}" class="loading-placeholder">数据同步中...</view>
+
+    <view class="list-wrapper">
+      <view wx:for="{{applicantList}}" wx:key="_id" class="app-card">
+        <view class="card-header">
+          <image class="user-avatar" src="{{item.studentDetail.avatarUrl || '/assets/images/default-avatar.png'}}" mode="aspectFill"></image>
+          <view class="user-meta">
+            <view class="name-box">
+              <text class="user-name">{{item.studentDetail.name}}</text>
+              <text class="user-tag">{{item.studentDetail.major}}</text>
+            </view>
+            <view class="job-target">意向：<text class="job-name">{{item.jobDetail.title}}</text></view>
+          </view>
+          <view class="status-dot">NEW</view>
+        </view>
+
+        <view class="quote-section">
+          <view class="quote-icon">“</view>
+          <view class="quote-text">{{item.studentDetail.teacherEvaluation || '该生专业基础扎实，实践能力强，推荐校友优先考虑。'}}</view>
+          <view class="quote-footer">— {{item.studentDetail.evaluatorName || '王老师'}} · 辅导员</view>
+        </view>
+
+        <view class="card-footer">
+          <text class="post-time">{{item.applyTime}} 投递</text>
+          <view class="btn-group">
+            <button class="btn-minor" hover-class="btn-hover" bindtap="viewResume" data-id="{{item.studentId}}">简历</button>
+            <button class="btn-primary" hover-class="btn-hover" bindtap="contactStudent" data-phone="{{item.studentDetail.phone}}">立即联系</button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{applicantList.length === 0 && !loading}}" class="empty-placeholder">
+      <image class="empty-img" src="/assets/images/empty-state.png" mode="aspectFit"></image>
+      <text class="empty-text">暂时还没有学弟学妹投递哦</text>
+      <button class="btn-post-now" bindtap="goToPost">主动发布职位</button>
+    </view>
+  </scroll-view>
+</view>

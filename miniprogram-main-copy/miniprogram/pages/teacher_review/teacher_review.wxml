@@ -1,0 +1,47 @@
+<!--pages/teacher_review/teacher_review.wxml-->
+<view class="container review-page">
+  <view class="header-section">
+    <view class="title-wrapper">
+      <text class="main-title">发布审核</text>
+      <t-badge count="{{reviewList.length}}" content="处理中" shape="circle" m-left="16rpx" />
+    </view>
+    <view class="subtitle">请核实校友发布的职位真实性，维护社区环境</view>
+  </view>
+
+  <scroll-view scroll-y class="list-container">
+    <view class="empty-wrapper" wx:if="{{reviewList.length === 0}}">
+      <t-empty icon="check-circle" description="暂无待处理任务" />
+    </view>
+
+    <view class="review-card" wx:for="{{reviewList}}" wx:key="_id">
+      <view class="card-header">
+        <view class="publisher">
+          <t-avatar image="{{item.publisherAvatar || ''}}" size="small" />
+          <view class="name-info">
+            <text class="u-name">{{item.publisherName || '匿名校友'}}</text>
+            <text class="u-tag">校友</text>
+          </view>
+        </view>
+        <text class="time-stamp">{{item.formattedDate}}</text>
+      </view>
+
+      <view class="card-content" bindtap="showDetail" data-id="{{item._id}}">
+        <view class="job-main">
+          <text class="job-name">{{item.title}}</text>
+          <text class="job-price">{{item.salary}}</text>
+        </view>
+        <view class="job-sub">
+          <text class="company">{{item.company}}</text>
+          <view class="divider"></view>
+          <text class="location">{{item.location}}</text>
+        </view>
+        <view class="job-desc">{{item.jobDescription}}</view>
+      </view>
+
+      <view class="card-action" bindtap="showDetail" data-id="{{item._id}}">
+        <t-button theme="light" variant="outline" size="small" block bindtap="onReject" data-id="{{item._id}}" class="btn-reject">驳回申请</t-button>
+        <t-button theme="primary" size="small" block bindtap="onApprove" data-id="{{item._id}}" class="btn-approve">审核通过</t-button>
+      </view>
+    </view>
+  </scroll-view>
+</view>

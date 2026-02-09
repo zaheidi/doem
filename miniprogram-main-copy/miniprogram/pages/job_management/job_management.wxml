@@ -1,0 +1,61 @@
+<view class="container">
+  <view class="tab-bar">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="*this" 
+      class="tab-item {{activeTab === index ? 'active' : ''}}"
+      bindtap="onTabChange" 
+      data-index="{{index}}"
+    >
+      {{item}}
+      <view class="active-line" wx:if="{{activeTab === index}}"></view>
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="list-container">
+    <view wx:for="{{jobList}}" wx:key="_id" class="job-card">
+      <view class="card-header">
+        <text class="job-title">{{item.title}}</text>
+        <text class="salary">{{item.salary}}</text>
+      </view>
+      
+      <view class="card-body">
+        <view class="info-item">
+          <text class="icon">🏢</text>
+          <text>{{item.company}}</text>
+        </view>
+        <view class="info-item">
+          <text class="icon">📍</text>
+          <text>{{item.location}}</text>
+        </view>
+
+        <view class="reject-reason-box" wx:if="{{item.status === '已驳回' && item.reviewerReason}}">
+          <view class="reject-title">
+            <t-icon name="error-circle-filled" size="32rpx" color="#e34d59" />
+            <text>审核未通过</text>
+          </view>
+          <view class="reject-content">{{item.reviewerReason}}</view>
+          <view class="reject-tips">请点击下方“编辑职位”修改后重新提交</view>
+        </view>
+      </view> <view class="card-footer">
+        <view class="status-group">
+          <text class="status-tag {{item.status === '已发布' ? 'tag-green' : (item.status === '待审核' ? 'tag-orange' : 'tag-red')}}">
+            {{item.status === '已发布' ? '开放中' : (item.status === '已驳回' ? '未通过' : item.status)}}
+          </text>
+          <text class="time">{{item.formattedDate || '刚刚'}}</text>
+        </view>
+        
+        <view class="action-buttons">
+          <button class="btn btn-outline" bindtap="goToEdit" data-id="{{item._id}}">编辑职位</button>
+          <button class="btn btn-danger" wx:if="{{item.status === '已发布'}}" bindtap="onStopJob" data-id="{{item._id}}">停止招聘</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{jobList.length === 0}}" class="empty-state">
+      <image class="empty-img" src="/assets/no_data.png" mode="aspectFit"></image>
+      <text class="empty-text">该状态下暂无职位，快去发布吧</text>
+      <button class="btn-primary" bindtap="goToPost">立即发布</button>
+    </view>
+  </scroll-view>
+</view>

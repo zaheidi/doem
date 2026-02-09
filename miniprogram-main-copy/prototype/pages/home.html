@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>首页</title>
+  <link rel="stylesheet" href="https://unpkg.com/tdesign-mobile-ui/dist/tdesign.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --safe-area-inset-top: env(safe-area-inset-top);
+      --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+    
+    .status-bar {
+      height: 44px;
+      background-color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      padding-top: var(--safe-area-inset-top);
+      position: relative;
+      z-index: 10;
+    }
+    
+    .status-bar .time {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .status-bar .icons {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .nav-bar {
+      height: 57px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .nav-bar .title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .tab-bar {
+      height: 83px;
+      background-color: #fff;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      border-top: 1px solid #f0f0f0;
+      padding-bottom: var(--safe-area-inset-bottom);
+    }
+    
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #999;
+    }
+    
+    .tab-item.active {
+      color: #0052d9;
+    }
+    
+    .tab-item .icon {
+      font-size: 24px;
+      margin-bottom: 2px;
+    }
+    
+    .content {
+      height: calc(100% - 44px - 57px - 83px);
+      padding: 15px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* 搜索栏样式 */
+    .search-box {
+      padding: 10px 15px;
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .search-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      flex: 1;
+      background: #f5f5f5;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-right: 15px;
+    }
+    
+    .search-icon {
+      color: #c2c2c2;
+      font-size: 14px;
+      margin-right: 8px;
+    }
+    
+    .search-input {
+      background: transparent;
+      border: none;
+      font-size: 14px;
+      width: 100%;
+      outline: none;
+    }
+    
+    .clear-icon {
+      color: #696969;
+      background: #c2c2c2;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+    
+    .add-job-btn {
+      width: 42px;
+      height: 43px;
+      border-radius: 8px;
+      background-color: #0052d9;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    /* 筛选栏样式 */
+    .filter-bar {
+      display: flex;
+      margin-bottom: 5px;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 8px 15px;
+      position: relative;
+      overflow: hidden;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .filter-options {
+      display: flex;
+      align-items: center;
+    }
+    
+    .filter-option {
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      transition: color 0.3s;
+      margin-right: 5px;
+    }
+    
+    .filter-option.active {
+      color: #0052d9;
+      font-weight: 500;
+    }
+    
+    .filter-option.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 3px;
+      background-color: #0052d9;
+      border-radius: 2px;
+    }
+    
+    .filter-actions {
+      display: flex;
+      align-items: center;
+    }
+    
+    .filter-dropdown {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: #666;
+      padding: 0 5px;
+      margin-left: 15px;
+    }
+    
+    .filter-dropdown .icon {
+      margin-left: 4px;
+      font-size: 12px;
+      transition: transform 0.3s;
+    }
+    
+    .filter-dropdown.active .icon {
+      transform: rotate(180deg);
+    }
+
+    .job-list {
+     padding-bottom: 20px;
+    }
+
+    .job-item {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .job-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .job-salary {
+      font-size: 18px;
+      color: #ff4d4f;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .job-company {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .job-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 10px;
+    }
+
+    .job-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      background: #f0f0f0;
+      color: #666;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 12px;
+    }
+
+    .detail-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 15px;
+      background: #0052d9;
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .publisher-row {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .publisher-container {
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+      margin-right: 15px;
+    }
+
+    .publisher-info,
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .publisher-info:last-child {
+      margin-bottom: 0;
+    }
+
+    .publisher-avatar,
+    .reviewer-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #eee;
+      margin-right: 8px;
+    }
+
+    .publisher-name,
+    .reviewer-name {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .publisher-tag {
+      font-size: 10px;
+      background-color: #e6f7ff;
+      color: #0052d9;
+      padding: 1px 6px;
+      border-radius: 10px;
+      margin-left: 6px;
+    }
+
+    .reviewer-tag {
+      font-size: 10px;
+      background-color: #fff0f6;
+      color: #eb2f96;
+      padding: 1px 6px;
+      border-radius: 10px;
+      margin-left: 6px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+    }
+
+    .loading .icon {
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .no-more {
+      text-align: center;
+      padding: 15px;
+      color: #999;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <div class="time">12:30</div>
+    <div class="icons">
+      <span><i class="fas fa-signal"></i></span>
+      <span><i class="fas fa-wifi"></i></span>
+      <span><i class="fas fa-battery-three-quarters"></i></span>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <div class="title">酱菜内推</div>
+  </div>
+  <div class="content">
+    <div class="search-box">
+      <div class="search-input-wrapper">
+        <span class="search-icon"><i class="fas fa-search"></i></span>
+        <input type="text" class="search-input" placeholder="搜索职位">
+        <span class="clear-icon"><i class="fas fa-times"></i></span>
+      </div>
+      <div class="add-job-btn"><i class="fas fa-plus"></i></div>
+    </div>
+    
+    <!-- 筛选栏 -->
+    <div class="filter-bar">
+      <div class="filter-options">
+        <div class="filter-option active" data-filter="recommend">推荐</div>
+        <div class="filter-option" data-filter="newest">最新</div>
+      </div>
+      <div class="filter-actions">
+        <div class="filter-dropdown" id="city-filter">
+          城市 <span class="icon"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <div class="filter-dropdown" id="more-filter">
+          岗位 <span class="icon"><i class="fas fa-chevron-down"></i></span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="job-list">
+      <div class="job-item">
+        <div class="job-title">前端开发工程师</div>
+        <div class="job-salary">15K-25K</div>
+        <div class="job-company">示例科技有限公司</div>
+        <div class="job-info">
+          <span class="job-location">北京市朝阳区</span>
+          <span class="job-date">2024-03-20</span>
+        </div>
+        <div class="job-tags">
+          <span class="tag">React</span>
+          <span class="tag">Vue</span>
+          <span class="tag">小程序</span>
+        </div>
+        <div class="publisher-container">
+          <div class="publisher-info">
+            <div class="publisher-avatar"></div>
+            <div class="publisher-name">姚经理</div>
+            <div class="publisher-tag">校友</div>
+          </div>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar"></div>
+            <div class="reviewer-name">张教授</div>
+            <div class="reviewer-tag">老师</div>
+          </div>
+        </div>
+        <div class="detail-btn">查看详情</div>
+      </div>
+      
+      <div class="job-item">
+        <div class="job-title">后端开发工程师</div>
+        <div class="job-salary">20K-35K</div>
+        <div class="job-company">云智科技有限公司</div>
+        <div class="job-info">
+          <span class="job-location">上海市浦东新区</span>
+          <span class="job-date">2024-03-18</span>
+        </div>
+        <div class="job-tags">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">微服务</span>
+        </div>
+        <div class="publisher-container">
+          <div class="publisher-info">
+            <div class="publisher-avatar"></div>
+            <div class="publisher-name">技术总监</div>
+            <div class="publisher-tag">校友</div>
+          </div>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar"></div>
+            <div class="reviewer-name">李教授</div>
+            <div class="reviewer-tag">老师</div>
+          </div>
+        </div>
+        <div class="detail-btn">查看详情</div>
+      </div>
+      
+      <div class="job-item">
+        <div class="job-title">产品经理</div>
+        <div class="job-salary">18K-30K</div>
+        <div class="job-company">创新互联网公司</div>
+        <div class="job-info">
+          <span class="job-location">深圳市南山区</span>
+          <span class="job-date">2024-03-15</span>
+        </div>
+        <div class="job-tags">
+          <span class="tag">用户增长</span>
+          <span class="tag">数据分析</span>
+          <span class="tag">产品设计</span>
+        </div>
+        <div class="publisher-container">
+          <div class="publisher-info">
+            <div class="publisher-avatar"></div>
+            <div class="publisher-name">李经理</div>
+            <div class="publisher-tag">校友</div>
+          </div>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar"></div>
+            <div class="reviewer-name">王教授</div>
+            <div class="reviewer-tag">老师</div>
+          </div>
+        </div>
+        <div class="detail-btn">查看详情</div>
+      </div>
+
+      <div class="loading">
+        <span class="icon"><i class="fas fa-spinner fa-spin"></i></span> 加载中...
+      </div>
+
+      <div class="no-more">没有更多数据了</div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <div class="tab-item active">
+      <div class="icon"><i class="fas fa-home"></i></div>
+      <div>职位</div>
+    </div>
+    <div class="tab-item">
+      <div class="icon"><i class="fas fa-chart-bar"></i></div>
+      <div>进度</div>
+    </div>
+    <div class="tab-item">
+      <div class="icon"><i class="fas fa-user"></i></div>
+      <div>我的</div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 点击详情按钮跳转到职位详情页
+      const detailBtns = document.querySelectorAll('.detail-btn');
+      detailBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // 在实际应用中，这里应该是跳转到详情页的逻辑
+          // 在iframe环境中，可以使用以下代码实现跳转
+          window.parent.postMessage('navigate:job_detail', '*');
+        });
+      });
+      
+      // 筛选选项点击事件
+      const filterOptions = document.querySelectorAll('.filter-option');
+      
+      // 筛选选项点击事件
+      filterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          filterOptions.forEach(o => o.classList.remove('active'));
+          this.classList.add('active');
+          
+          // 根据筛选类型更新职位列表（这里只是示例）
+          const filterType = this.getAttribute('data-filter');
+          console.log('筛选类型:', filterType);
+          // 这里可以添加实际的筛选逻辑
+        });
+      });
+      
+      // 下拉筛选点击事件
+      const cityFilter = document.getElementById('city-filter');
+      const moreFilter = document.getElementById('more-filter');
+      
+      cityFilter.addEventListener('click', function() {
+        this.classList.toggle('active');
+        // 这里可以添加城市筛选的弹出逻辑
+        alert('城市筛选功能待实现');
+      });
+      
+      moreFilter.addEventListener('click', function() {
+        this.classList.toggle('active');
+        // 这里可以添加更多筛选的弹出逻辑
+        alert('岗位筛选功能待实现');
+      });
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,23 @@
+/**app.wxss**/
+@font-face {
+    font-family: 'LocalFont';
+    src: local('PingFang SC'), local('Microsoft YaHei'), local('Arial');
+    font-weight: normal;
+    font-style: normal;
+  }
+  .icon {
+    font-family: 'TDesignIcon';
+  }
+page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f7f7f7;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
