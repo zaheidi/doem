@@ -10,3 +10,4 @@
   - 云函数：处理审核逻辑、AI 接口调用、权限校验。
 - 外部 API：例如腾讯云 AI 或 DeepSeek 等大模型接口（用于 AI 匹配度评估）。
 https://mcn0gevnoh36.feishu.cn/wiki/IZE7wLTruip63EkLPLicU5kMnAc?from=from_copylink
+miniprogram-main-copy为最新版本
